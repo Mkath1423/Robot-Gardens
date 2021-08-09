@@ -7,7 +7,7 @@ public class LevelData : MonoBehaviour
     public string filename;
     public string Filepath { get { return Application.dataPath + "\\" + filename + ".txt"; } }
 
-    public WorldInfo worldInfo;
+    public TilemapWithInfo worldTiles;
 
     public List<Garden> gardens;
 
@@ -22,7 +22,7 @@ public class LevelData : MonoBehaviour
         else
         {
             Debug.Log("Cound not find file. Loading default values...");
-            worldInfo = new WorldInfo();
+            worldTiles = new TilemapWithInfo();
         }
     }
 
@@ -37,7 +37,7 @@ public class LevelData : MonoBehaviour
         // Serialize
         SaveObject saveObject = new LevelDataSaveObject()
         {
-            worldInfoSaveObject = new WorldInfoSaveObject(worldInfo)
+            tilemapWithInfoSaveObject = new TilemapWithInfoSaveObject(worldTiles)
         };
 
         Serializer.Save(saveObject, Filepath);
@@ -46,8 +46,8 @@ public class LevelData : MonoBehaviour
     private void Load()
     {
         LevelDataSaveObject saveObject = Serializer.Load<LevelDataSaveObject>(Filepath);
-        
-        worldInfo = new WorldInfo(saveObject.worldInfoSaveObject);
+
+        worldTiles = new TilemapWithInfo(saveObject.tilemapWithInfoSaveObject);
 
         gardens = new List<Garden>();
 

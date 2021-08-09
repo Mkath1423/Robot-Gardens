@@ -4,8 +4,9 @@ using UnityEngine;
 using System;
 
 [System.Serializable]
-public class Garden
+public class Garden : TilemapWithInfo
 {
+    /*
     [SerializeField]
     public List<Vector3Int> positions = new List<Vector3Int>();
 
@@ -13,6 +14,7 @@ public class Garden
     public List<InfoContainer> info = new List<InfoContainer>();
     
     public Dictionary<Vector3Int, InfoContainer> tileInfo = new Dictionary<Vector3Int, InfoContainer>();
+    */
 
     public List<Vector3Int> validTiles;
 
@@ -47,7 +49,7 @@ public class Garden
     }
 
     // Tile Manipulations
-    public bool SetTileInfo(Vector3Int position, InfoContainer info)
+    new public bool SetTileInfo(Vector3Int position, InfoContainer info)
     {
         // check for valid placement
         if (IsTileValid(position)) return false;
@@ -57,7 +59,7 @@ public class Garden
         return true;
     }
 
-    public void RemoveTile(Vector3Int key)
+    new public void RemoveTile(Vector3Int key)
     {
         tileInfo.Remove(key);
     }
@@ -90,7 +92,7 @@ public class Garden
     }
 
     //Saving and Loading
-    public void OnBeforeSave()
+    new public void OnBeforeSave()
     {
         positions.Clear();
         info.Clear();
@@ -100,15 +102,13 @@ public class Garden
             positions.Add(kvp.Key);
             info.Add(kvp.Value);
         }
-
     }
 
-    public void OnAfterLoad()
+    new public void OnAfterLoad()
     {
         for (int i = 0; i != Mathf.Min(positions.Count, info.Count); i++)
         {
             tileInfo.Add(positions[i], info[i]);
         }
-
     }
 }

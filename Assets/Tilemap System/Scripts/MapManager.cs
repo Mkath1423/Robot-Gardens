@@ -5,46 +5,51 @@ using UnityEngine.Tilemaps;
 
 public class MapManager : MonoBehaviour
 {
-    public Tilemap map;
+    public List<Tilemap> worldTilemaps;
+    public List<Tilemap> gardenTilemaps;
 
     public TileBaseDatabase tileBaseDatabase;
     public TileWithInfo tileToPlace;
 
     public LevelData level;
-    public WorldInfo worldInfo;
+    public TilemapWithInfo worldTiles;
 
     void Start()
     {
-        SetLevelTiles(level, map);
-        worldInfo = level.worldInfo;
+        worldTiles = level.worldTiles;
+
+        SetLevelTiles(worldTiles, worldTilemaps);
     }
 
-    void SetLevelTiles(LevelData level, Tilemap map)
+    void SetLevelTiles(TilemapWithInfo tiles, List<Tilemap> maps)
     {
-        map.ClearAllTiles();
-
-        foreach (KeyValuePair<Vector3Int, InfoContainer> kvp in level.worldInfo.worldInfo)
+        foreach (Tilemap map in maps)
         {
-            map.SetTile(kvp.Key, tileBaseDatabase.GetTileBase(kvp.Value.tileId, level.worldInfo));
+            map.ClearAllTiles();
+        }
+
+        foreach (KeyValuePair<Vector3Int, InfoContainer> kvp in tiles.tileInfo)
+        {
+            maps[kvp.Key.z].SetTile(kvp.Key, tileBaseDatabase.GetTileBase(kvp.Value.tileId, tiles));
         }
     }
 
-    public void ClearWorld()
+    public void ClearWorld(Tilemap map)
     {
         map.ClearAllTiles();
-        level.worldInfo.ClearWorld();
+        level.worldTiles.ClearTilemap();
     }
 
-    public void PlaceTile(Vector3Int position, TileWithInfo tileToPlace)
+    public void PlaceTile(Vector3Int position, TileWithInfo tileToPlace, Tilemap map)
     {
-        worldInfo.SetTileInfo(position, tileToPlace.GenerateTileInfoContainer());
+        worldTiles.SetTileInfo(position, tileToPlace.GenerateTileInfoContainer());
 
         map.SetTile(position, tileToPlace);
     }
 
-    public void RemoveTile(Vector3Int position)
+    public void RemoveTile(Vector3Int position, Tilemap map)
     {
-        level.worldInfo.RemoveTile(position);
+        level.worldTiles.RemoveTile(position);
         map.SetTile(position, null);
     }
 }

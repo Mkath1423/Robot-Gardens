@@ -19,7 +19,7 @@ public class WorldInfo
         info = new List<InfoContainer>();
         worldInfo = new Dictionary<Vector3Int, InfoContainer>();
     }
-
+    /*
     public WorldInfo(WorldInfoSaveObject saveObject)
     {
         positions = saveObject.positions;
@@ -27,7 +27,7 @@ public class WorldInfo
 
         OnAfterLoad();
     }
-
+    */
     public InfoContainer GetTileInfo(Vector3Int key)
     {
         return worldInfo[key];

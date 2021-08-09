@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TilemapWithInfo : MonoBehaviour
+public class TilemapWithInfo
 {
     [SerializeField]
     public List<Vector3Int> positions = new List<Vector3Int>();
@@ -11,6 +11,21 @@ public class TilemapWithInfo : MonoBehaviour
     public List<InfoContainer> info = new List<InfoContainer>();
 
     public Dictionary<Vector3Int, InfoContainer> tileInfo = new Dictionary<Vector3Int, InfoContainer>();
+
+    public TilemapWithInfo()
+    {
+        positions = new List<Vector3Int>();
+        info = new List<InfoContainer>();
+        tileInfo = new Dictionary<Vector3Int, InfoContainer>();
+    }
+
+    public TilemapWithInfo(TilemapWithInfoSaveObject saveObject)
+    {
+        positions = saveObject.positions;
+        info = saveObject.info;
+
+        OnAfterLoad();
+    }
 
     public InfoContainer GetTileInfo(Vector3Int key)
     {

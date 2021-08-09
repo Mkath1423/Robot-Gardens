@@ -5,18 +5,17 @@ using UnityEngine;
 public abstract class SaveObject { }
 
 [System.Serializable]
-public class WorldInfoSaveObject : SaveObject
-{
-    
+public class TilemapWithInfoSaveObject : SaveObject
+{ 
     public List<Vector3Int> positions;
     public List<InfoContainer> info;
 
-    public WorldInfoSaveObject(WorldInfo worldInfo)
+    public TilemapWithInfoSaveObject(TilemapWithInfo tiles)
     {
-        worldInfo.OnBeforeSave();
+        tiles.OnBeforeSave();
 
-        positions = worldInfo.positions;
-        info = worldInfo.info;
+        positions = tiles.positions;
+        info = tiles.info;
     }
 }
 
@@ -50,7 +49,7 @@ public class GardenSaveObject : SaveObject
 
 public class LevelDataSaveObject: SaveObject
 {
-    public WorldInfoSaveObject worldInfoSaveObject;
+    public TilemapWithInfoSaveObject tilemapWithInfoSaveObject;
 
     public List<GardenSaveObject> gardens;
 
