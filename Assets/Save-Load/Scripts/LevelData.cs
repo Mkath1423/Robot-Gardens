@@ -9,6 +9,7 @@ public class LevelData : MonoBehaviour
 
     public WorldInfo worldInfo;
 
+    public List<Garden> gardens;
 
     // Start is called before the first frame update
     void Start()
@@ -22,10 +23,7 @@ public class LevelData : MonoBehaviour
         {
             Debug.Log("Cound not find file. Loading default values...");
             worldInfo = new WorldInfo();
-            
-           
         }
-        
     }
 
     private void OnApplicationQuit()
@@ -50,5 +48,12 @@ public class LevelData : MonoBehaviour
         LevelDataSaveObject saveObject = Serializer.Load<LevelDataSaveObject>(Filepath);
         
         worldInfo = new WorldInfo(saveObject.worldInfoSaveObject);
+
+        gardens = new List<Garden>();
+
+        foreach (GardenSaveObject gso in saveObject.gardens)
+        {
+            gardens.Add(new Garden(gso));
+        }
     }
 }

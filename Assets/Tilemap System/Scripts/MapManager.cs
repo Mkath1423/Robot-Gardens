@@ -19,8 +19,6 @@ public class MapManager : MonoBehaviour
         worldInfo = level.worldInfo;
     }
 
-
-
     void SetLevelTiles(LevelData level, Tilemap map)
     {
         map.ClearAllTiles();
