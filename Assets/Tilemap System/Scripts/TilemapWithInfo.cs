@@ -46,7 +46,7 @@ public class TilemapWithInfo
 
     public void ClearTilemap()
     {
-        Debug.Log("Clearing tilemap info");
+        Debug.Log("Clearing tilemnap info");
         tileInfo.Clear();
 
     }
