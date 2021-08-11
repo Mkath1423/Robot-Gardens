@@ -4,18 +4,39 @@ using UnityEngine;
 
 public abstract class SaveObject { }
 
-[System.Serializable]
-public class TilemapWithInfoSaveObject : SaveObject
-{ 
+public class TilemapWithInfoLayerSaveObject : SaveObject
+{
+    public int layerIndex;
+    public string layerName;
+
     public List<Vector3Int> positions;
     public List<InfoContainer> info;
 
-    public TilemapWithInfoSaveObject(TilemapWithInfo tiles)
+    public TilemapWithInfoLayerSaveObject(TilemapWithInfoLayer layer)
     {
-        tiles.OnBeforeSave();
+        layer.OnBeforeSave();
 
-        positions = tiles.positions;
-        info = tiles.info;
+        positions = layer.positions;
+        info = layer.info;
+
+        layerName = layer.layerName;
+        layerIndex = layer.layerIndex;
+    }
+}
+
+[System.Serializable]
+public class TilemapWithInfoSaveObject : SaveObject
+{
+    public List<TilemapWithInfoLayerSaveObject> layers;
+
+    public TilemapWithInfoSaveObject(TilemapWithInfo tilemap)
+    {
+        layers.Clear();
+
+        foreach(TilemapWithInfoLayer layer in tilemap.layers)
+        {
+            layers.Add(new TilemapWithInfoLayerSaveObject(layer));
+        }
     }
 }
 
