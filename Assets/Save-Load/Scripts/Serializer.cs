@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
+using System.Text;
 using UnityEngine;
 
 public static class Serializer
@@ -10,9 +12,18 @@ public static class Serializer
     {
         string json = JsonUtility.ToJson(so);
 
-        File.WriteAllText(filename, json);
-
         Debug.Log(json);
+
+        File.WriteAllText(filename, json);
+        /*
+        using (FileStream fs = File.Create(Application.dataPath + "\\" + filename))
+        {
+            byte[] jsondata = new UTF8Encoding(true).GetBytes(json);
+
+            fs.Write(jsondata, 0, jsondata.Length);
+            //File.WriteAllText(filename, json);
+        }
+        */
     }
 
     public static T Load<T>(string filepath)

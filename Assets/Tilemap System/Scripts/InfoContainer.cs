@@ -7,6 +7,7 @@ using System;
 public class InfoContainer
 {
     public string tileId;
+    public string targetLayer;
 
     public List<string> keys = new List<string>();
     public List<string> values = new List<string>();
@@ -17,12 +18,12 @@ public class InfoContainer
         return values[keys.IndexOf(key)];
     }
 
-    public InfoContainer(string _tileId, List<string> _keys, List<string> _values)
+    public InfoContainer(string _tileId, string _targetLayer, List<string> _keys = null, List<string> _values = null)
     {
         tileId = _tileId;
         keys = _keys;
         values = _values;
-
+        targetLayer = _targetLayer;
     }
 
     public InfoContainer(InfoContainer toClone) 

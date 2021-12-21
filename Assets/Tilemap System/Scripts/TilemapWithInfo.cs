@@ -2,31 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TilemapWithInfo
+public class TilemapWithInfo
 {
     public TilemapWithInfoLayer[] layers;
 
-    public int amountOfLayers = 3;
-
-    public virtual InfoContainer GetTileInfo(Vector3Int position)
+    public TilemapWithInfo(TilemapWithInfoSaveObject saveObject)
     {
-        return layers[position.z].tileInfo[position];
+        layers = new TilemapWithInfoLayer[saveObject.layers.Count];
+
+        foreach (TilemapWithInfoLayerSaveObject layerso in saveObject.layers)
+        {
+            layers[layerso.layerIndex] = new TilemapWithInfoLayer(layerso);
+        }
+    }
+
+    public virtual InfoContainer GetTileInfo(Vector3Int position, int layer)
+    {
+        return GetLayerByIndex(layer).tileInfo[position];
     }
 
     public virtual void SetTileInfo(Vector3Int position, InfoContainer value)
     {
-        layers[position.z].tileInfo[position] = value;
+        GetLayerByName(value.targetLayer).tileInfo[position] = value;
     }
 
-    public virtual void RemoveTile(Vector3Int position)
+    public virtual void RemoveTile(Vector3Int position, int layer)
     {
-        layers[position.z].tileInfo.Remove(position);
+        GetLayerByIndex(layer).tileInfo.Remove(position);
     }
 
     public virtual void ClearTilemap(int layer)
     {
-        layers[layer].tileInfo.Clear();
+        GetLayerByIndex(layer).tileInfo.Clear();
     }
+
+    public TilemapWithInfoLayer GetLayerByIndex(int index)
+    {
+        foreach(TilemapWithInfoLayer layer in layers)
+        {
+            if(layer.layerIndex == index)
+            {
+                return layer;
+            }
+        }
+
+        return null;
+    }
+
+    public TilemapWithInfoLayer GetLayerByName(string name)
+    {
+        foreach (TilemapWithInfoLayer layer in layers)
+        {
+            if (layer.layerName == name)
+            {
+                return layer;
+            }
+        }
+
+        return null;
+    }
+
+    public virtual void OnBeforeSave() { }
+    public virtual void OnAfterLoad() { }
 }
 
 public enum LayerOrder

@@ -6,37 +6,24 @@ using System;
 [System.Serializable]
 public class Garden : TilemapWithInfo
 {
-    /*
-    [SerializeField]
-    public List<Vector3Int> positions = new List<Vector3Int>();
+    public List<Vector3Int> validTiles = new List<Vector3Int>();
 
-    [SerializeField]
-    public List<InfoContainer> info = new List<InfoContainer>();
-    
-    public Dictionary<Vector3Int, InfoContainer> tileInfo = new Dictionary<Vector3Int, InfoContainer>();
-    */
+    public List<Vector3Int> validWalls = new List<Vector3Int>();
 
-    public List<Vector3Int> validTiles;
+    public string name = "";
 
-    public List<Vector3Int> validWalls;
-
-    public string name;
-
-    public string id;
+    public string id = "";
 
     public Sprite sprite;
 
-    // Constructors
-    public Garden(List<Vector3Int> validTiles, List<Vector3Int> validWalls)
-	{
-        this.validTiles = validTiles;
-        this.validWalls = validWalls;
-    }
-
-    public Garden(GardenSaveObject saveObject)
+    public Garden(GardenSaveObject saveObject) : base(saveObject)
     {
-        positions = saveObject.positions;
-        info = saveObject.info;
+        layers = new TilemapWithInfoLayer[saveObject.layers.Count];
+
+        foreach (TilemapWithInfoLayerSaveObject layerso in saveObject.layers)
+        {
+            layers[layerso.layerIndex] = new TilemapWithInfoLayer(layerso);
+        }
 
         validTiles = saveObject.validTiles;
         validWalls = saveObject.validWalls;
@@ -49,19 +36,17 @@ public class Garden : TilemapWithInfo
     }
 
     // Tile Manipulations
-    new public bool SetTileInfo(Vector3Int position, InfoContainer info)
+
+    public override void SetTileInfo(Vector3Int position, InfoContainer value)
     {
-        // check for valid placement
-        if (IsTileValid(position)) return false;
-        
-        // place tile
-        tileInfo[position] = info;
-        return true;
+        if (IsTileValid(position)) base.SetTileInfo(position, value);
+        else if (IsWallValid(position)) base.SetTileInfo(position, value);
     }
 
-    new public void RemoveTile(Vector3Int key)
+    public override void RemoveTile(Vector3Int position, int layer)
     {
-        tileInfo.Remove(key);
+        if (IsTileValid(position)) base.RemoveTile(position, layer);
+        else if (IsWallValid(position)) base.RemoveTile(position, layer);
     }
 
     // Checks
@@ -89,26 +74,5 @@ public class Garden : TilemapWithInfo
         }
 
         return false;
-    }
-
-    //Saving and Loading
-    new public void OnBeforeSave()
-    {
-        positions.Clear();
-        info.Clear();
-
-        foreach (KeyValuePair<Vector3Int, InfoContainer> kvp in tileInfo)
-        {
-            positions.Add(kvp.Key);
-            info.Add(kvp.Value);
-        }
-    }
-
-    new public void OnAfterLoad()
-    {
-        for (int i = 0; i != Mathf.Min(positions.Count, info.Count); i++)
-        {
-            tileInfo.Add(positions[i], info[i]);
-        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class SaveObject { }
 
+[System.Serializable]
 public class TilemapWithInfoLayerSaveObject : SaveObject
 {
     public int layerIndex;
@@ -31,7 +32,7 @@ public class TilemapWithInfoSaveObject : SaveObject
 
     public TilemapWithInfoSaveObject(TilemapWithInfo tilemap)
     {
-        layers.Clear();
+        layers = new List<TilemapWithInfoLayerSaveObject>();
 
         foreach(TilemapWithInfoLayer layer in tilemap.layers)
         {
@@ -40,10 +41,9 @@ public class TilemapWithInfoSaveObject : SaveObject
     }
 }
 
-public class GardenSaveObject : SaveObject
+[System.Serializable]
+public class GardenSaveObject : TilemapWithInfoSaveObject
 {
-    public List<Vector3Int> positions;
-    public List<InfoContainer> info;
 
     public List<Vector3Int> validTiles;
     public List<Vector3Int> validWalls;
@@ -52,12 +52,16 @@ public class GardenSaveObject : SaveObject
     public string id;
     public Sprite sprite;
 
-    public GardenSaveObject(Garden garden)
+    public GardenSaveObject(Garden garden) : base(garden)
     {
         garden.OnBeforeSave();
 
-        positions = garden.positions;
-        info = garden.info;
+        layers.Clear();
+
+        foreach (TilemapWithInfoLayer layer in garden.layers)
+        {
+            layers.Add(new TilemapWithInfoLayerSaveObject(layer));
+        }
 
         validTiles = garden.validTiles;
         validWalls = garden.validWalls;
@@ -68,6 +72,7 @@ public class GardenSaveObject : SaveObject
     }
 }
 
+[System.Serializable]
 public class LevelDataSaveObject: SaveObject
 {
     public TilemapWithInfoSaveObject tilemapWithInfoSaveObject;

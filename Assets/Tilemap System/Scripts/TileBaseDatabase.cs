@@ -11,10 +11,17 @@ public class TileBaseDatabase : ScriptableObject
 
     public TileWithInfo GetTileBase(string key, TilemapWithInfo worldInfo)
     {
-        // Init values here
-        TileWithInfo output = values[keys.IndexOf(key)];
-        output.worldInfo = worldInfo;
-        return output;
-    }
+        int index = keys.IndexOf(key);
 
+        if(index >= 0)
+        {
+            TileWithInfo output = values[index];
+
+            output.tilemap = worldInfo;
+
+            return output;
+        }
+
+        return null;
+    }
 }

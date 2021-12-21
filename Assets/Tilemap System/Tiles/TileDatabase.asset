@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee0de8f682fa904cb40169a64ffc696, type: 3}
+  m_Name: TileDatabase
+  m_EditorClassIdentifier: 
+  keys:
+  - dirt
+  - rock
+  - plant_leafy
+  - grass
+  values:
+  - {fileID: 11400000, guid: de2f5553b12656b46b5c6291846ae591, type: 2}
+  - {fileID: 11400000, guid: ab208629ff34e914694ca55b5b418154, type: 2}
+  - {fileID: 11400000, guid: f8d5cbc4a4609284e9876d02e822082a, type: 2}
+  - {fileID: 11400000, guid: e2479ee43c8c12f4391e50c8d55f5e42, type: 2}

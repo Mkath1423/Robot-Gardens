@@ -11,6 +11,9 @@ public class LevelData : MonoBehaviour
 
     public List<Garden> gardens;
 
+    public TilemapWithInfoSaveObject defaultSaveObject = default;
+    public GardenSaveObject defaultGardenSaveObject = default;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,24 +25,44 @@ public class LevelData : MonoBehaviour
         else
         {
             Debug.Log("Cound not find file. Loading default values...");
-            worldTiles = new TilemapWithInfo();
+            worldTiles = new TilemapWithInfo(defaultSaveObject);
+            gardens = new List<Garden>();
         }
+    }
+
+    public Garden GetGarden(string id)
+    {
+        foreach(Garden garden in gardens)
+        {
+            if (garden.id == id) return garden;
+        }
+
+        return null;
+        // throw new KeyNotFoundException($"Id {id} was not found in gardens");
     }
 
     private void OnApplicationQuit()
     {
+
+        foreach(TilemapWithInfoLayer layer in worldTiles.layers)
+        {
+            foreach(KeyValuePair<Vector3Int, InfoContainer> kvp in layer.tileInfo)
+            {
+                Debug.Log($"{kvp.Key} {kvp.Value}");
+            }
+        }
         Save();
     }
 
     private void Save()
     {
-
         // Serialize
         SaveObject saveObject = new LevelDataSaveObject()
         {
             tilemapWithInfoSaveObject = new TilemapWithInfoSaveObject(worldTiles)
         };
 
+        Debug.Log(saveObject);
         Serializer.Save(saveObject, Filepath);
     }
 
